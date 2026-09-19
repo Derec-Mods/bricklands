@@ -35,20 +35,20 @@ import org.jetbrains.annotations.Nullable;
  * original Hex Lands (2019) by superfluke, anonlinux777, and TehNut.
  * Forked and adapted here for Bricklands.
  */
-public class HexChunkGenerator extends NoiseBasedChunkGenerator
+public class BrickChunkGenerator extends NoiseBasedChunkGenerator
 {
-    public static final MapCodec<HexChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final MapCodec<BrickChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         BiomeSource.CODEC.fieldOf("biome_source").forGetter(c -> c.biomeSource),
         NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(c -> c.settings),
         BrickSettings.CODEC.fieldOf("hex_settings").forGetter(c -> c.hexSettings)
-    ).apply(instance, HexChunkGenerator::new));
+    ).apply(instance, BrickChunkGenerator::new));
 
     private final Holder<NoiseGeneratorSettings> settings;
     private final BrickSettings hexSettings;
 
     private final Supplier<Aquifer.FluidPicker> stupidMojangGlobalFluidPicker;
 
-    public HexChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BrickSettings hexSettings)
+    public BrickChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BrickSettings hexSettings)
     {
         super(biomeSource, settings);
         this.settings = settings;
@@ -65,7 +65,7 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
     }
 
     @Override
-    protected MapCodec<HexChunkGenerator> codec()
+    protected MapCodec<BrickChunkGenerator> codec()
     {
         return CODEC;
     }

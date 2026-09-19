@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import org.slf4j.Logger;
 
-import com.alcatrazescapee.hexlands.world.HexChunkGenerator;
+import com.alcatrazescapee.hexlands.world.BrickChunkGenerator;
 
 public final class HexLands
 {
@@ -18,7 +18,7 @@ public final class HexLands
     public static void init(BiConsumer<ResourceLocation, MapCodec<? extends ChunkGenerator>> registry)
     {
         LOGGER.info("BOB THE BUILDER...");
-        registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "hexlands"), HexChunkGenerator.CODEC);
-        registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "bricklands"), HexChunkGenerator.CODEC);
+        registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "hexlands"), BrickChunkGenerator.CODEC);
+        registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "bricklands"), BrickChunkGenerator.CODEC);
     }
 }
