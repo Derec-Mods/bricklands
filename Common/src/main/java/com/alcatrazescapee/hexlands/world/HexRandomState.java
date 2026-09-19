@@ -18,6 +18,10 @@ import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
 import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.RandomState;
 
+/**
+ * Derived from HexLands by AlcatrazEscapee, used under the MIT License.
+ * Forked and adapted here for Bricklands.
+ */
 public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.Sampler hexSampler)
 {
     private static final Cache<RandomState, HexRandomState> RANDOM_STATE_EXTENSIONS = CacheBuilder.newBuilder()

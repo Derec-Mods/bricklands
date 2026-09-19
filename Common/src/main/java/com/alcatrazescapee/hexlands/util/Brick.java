@@ -3,6 +3,9 @@ package com.alcatrazescapee.hexlands.util;
 import net.minecraft.core.BlockPos;
 
 /**
+ * Derived from HexLands by AlcatrazEscapee, used under the MIT License.
+ * Forked and adapted here for Bricklands.
+ *
  * A running-bond rectangle: odd rows are shifted by half a brick width.
  */
 public record Brick(int col, int row, double width, double height)

@@ -16,6 +16,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+/**
+ * Derived from HexLands by AlcatrazEscapee, used under the MIT License.
+ * Forked and adapted here for Bricklands.
+ */
 public record BrickSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
 {
     private static final Map<ResourceLocation, BrickSettings> DEFAULTS = new Object2ObjectOpenHashMap<>();

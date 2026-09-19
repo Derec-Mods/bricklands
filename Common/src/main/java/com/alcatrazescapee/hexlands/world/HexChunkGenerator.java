@@ -30,6 +30,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Derived from HexLands by AlcatrazEscapee, used under the MIT License.
+ * Forked and adapted here for Bricklands.
+ */
 public class HexChunkGenerator extends NoiseBasedChunkGenerator
 {
     public static final MapCodec<HexChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
