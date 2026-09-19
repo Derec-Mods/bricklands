@@ -56,6 +56,7 @@ public record HexSettings(double biomeScale, int widthChunks, int heightChunks, 
     private static void register(String id, HexSettings settings)
     {
         DEFAULTS.put(ResourceLocation.fromNamespaceAndPath(HexLands.MOD_ID, id), settings);
+        DEFAULTS.put(ResourceLocation.fromNamespaceAndPath("bricklands", id), settings);
     }
 
     public record BorderSettings(int minHeight, int maxHeight, BlockState state)

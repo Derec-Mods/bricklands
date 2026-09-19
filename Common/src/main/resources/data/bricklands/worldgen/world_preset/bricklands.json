@@ -9,7 +9,7 @@
           "type": "minecraft:multi_noise",
           "preset": "minecraft:overworld"
         },
-        "hex_settings": "hexlands:overworld"
+        "hex_settings": "bricklands:overworld"
       }
     },
     "minecraft:the_nether": {
@@ -21,7 +21,7 @@
           "type": "minecraft:multi_noise",
           "preset": "minecraft:nether"
         },
-        "hex_settings": "hexlands:nether"
+        "hex_settings": "bricklands:nether"
       }
     },
     "minecraft:the_end": {
@@ -32,7 +32,7 @@
         "biome_source": {
           "type": "minecraft:the_end"
         },
-        "hex_settings": "hexlands:the_end"
+        "hex_settings": "bricklands:the_end"
       }
     }
   }

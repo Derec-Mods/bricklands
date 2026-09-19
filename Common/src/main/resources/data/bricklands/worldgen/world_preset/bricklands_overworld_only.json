@@ -9,7 +9,7 @@
           "type": "minecraft:multi_noise",
           "preset": "minecraft:overworld"
         },
-        "hex_settings": "hexlands:overworld"
+        "hex_settings": "bricklands:overworld"
       }
     },
     "minecraft:the_nether": {
