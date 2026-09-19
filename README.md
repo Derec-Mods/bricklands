@@ -1,4 +1,4 @@
-This mod is based on [Hex Lands](https://www.curseforge.com/minecraft/mc-mods/hex-lands) by superfluke, et. al., rewritten so biomes sit on a staggered brick grid instead of hexes.
+This mod is based on [HexLands](https://github.com/alcatrazescapee/hexlands) by AlcatrazEscapee (MIT), rewritten so biomes sit on a staggered brick grid instead of hexes. HexLands itself is based on the original [Hex Lands](https://github.com/superfluke/hexlands) (2019) by superfluke, anonlinux777, and TehNut.
 
 ### Features
 
@@ -42,3 +42,8 @@ Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). 
     "brick_settings": "bricklands:overworld"
 }
 ```
+
+### Attribution
+
+- [Hex Lands](https://github.com/superfluke/hexlands) (2019) by superfluke, anonlinux777, and TehNut
+- [HexLands](https://github.com/alcatrazescapee/hexlands) by AlcatrazEscapee (MIT License)
