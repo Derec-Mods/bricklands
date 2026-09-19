@@ -2,6 +2,7 @@ package com.alcatrazescapee.bricklands.world;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import com.google.common.base.Suppliers;
 import com.mojang.serialization.MapCodec;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -38,11 +40,12 @@ import org.jetbrains.annotations.Nullable;
 public class BrickChunkGenerator extends NoiseBasedChunkGenerator
 {
     public static final MapCodec<BrickChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        BiomeSource.CODEC.fieldOf("biome_source").forGetter(c -> c.biomeSource),
+        BiomeSource.CODEC.fieldOf("biome_source").forGetter(c -> c.directBiomeSource),
         NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(c -> c.settings),
         BrickSettings.CODEC.fieldOf("brick_settings").forGetter(c -> c.brickSettings)
     ).apply(instance, BrickChunkGenerator::new));
 
+    private final BiomeSource directBiomeSource;
     private final Holder<NoiseGeneratorSettings> settings;
     private final BrickSettings brickSettings;
 
@@ -50,7 +53,8 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
 
     public BrickChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BrickSettings brickSettings)
     {
-        super(biomeSource, settings);
+        super(brickSettings.randomBiomes() ? new RandomBrickBiomeSource(biomeSource, brickSettings) : biomeSource, settings);
+        this.directBiomeSource = biomeSource;
         this.settings = settings;
         this.brickSettings = brickSettings;
 
@@ -176,7 +180,7 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
         final NoiseSettings noiseSettings = settings.value().noiseSettings();
         final BrickRandomState brickRandomState = BrickRandomState.modify(state, settings.value(), brickSettings);
         final double preliminaryHeight = noiseChunk != null ? noiseChunk.preliminarySurfaceLevel((int) (center.getX() / brickScale), (int) (center.getZ() / brickScale)) : backupSurfaceY;
-        final Holder<Biome> biome = biomeSource.getNoiseBiome(quartX, QuartPos.fromBlock((int) preliminaryHeight), quartZ, brickRandomState.brickSampler());
+        final Holder<Biome> biome = getBiomeSource().getNoiseBiome(quartX, QuartPos.fromBlock((int) preliminaryHeight), quartZ, brickRandomState.brickSampler());
         final RandomSource random = new XoroshiroRandomSource(brick.col() * 178293412341L, brick.row() * 7520351231L);
 
         final int minY = noiseSettings.minY();
@@ -207,5 +211,53 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
     interface ColumnApplier
     {
         void apply(BlockPos.MutableBlockPos cursor, PlacedBrick placed);
+    }
+
+    /**
+     * Picks one biome per brick from the parent source's biome list, seeded by brick column and row.
+     */
+    private static class RandomBrickBiomeSource extends BiomeSource
+    {
+        private final BiomeSource parent;
+        private final BrickSettings brickSettings;
+        private final List<Holder<Biome>> biomes;
+
+        RandomBrickBiomeSource(BiomeSource parent, BrickSettings brickSettings)
+        {
+            this.parent = parent;
+            this.brickSettings = brickSettings;
+            this.biomes = parent.possibleBiomes().stream()
+                .sorted(Comparator.comparing(holder -> holder.unwrapKey().map(key -> key.location().toString()).orElse("")))
+                .toList();
+        }
+
+        @Override
+        protected Stream<Holder<Biome>> collectPossibleBiomes()
+        {
+            return biomes.stream();
+        }
+
+        @Override
+        protected MapCodec<? extends BiomeSource> codec()
+        {
+            return MapCodec.unit(this);
+        }
+
+        @Override
+        public Holder<Biome> getNoiseBiome(int quartX, int quartY, int quartZ, Climate.Sampler sampler)
+        {
+            if (biomes.isEmpty())
+            {
+                return parent.getNoiseBiome(quartX, quartY, quartZ, sampler);
+            }
+            final double scale = brickSettings.biomeScale();
+            final double width = brickSettings.brickWidthBlocks() * scale;
+            final double height = brickSettings.brickHeightBlocks() * scale;
+            final int blockX = QuartPos.toBlock(quartX);
+            final int blockZ = QuartPos.toBlock(quartZ);
+            final Brick brick = Brick.blockToBrick(blockX * scale, blockZ * scale, width, height);
+            final RandomSource random = new XoroshiroRandomSource(brick.col() * 178293412341L, brick.row() * 7520351231L);
+            return biomes.get(random.nextInt(biomes.size()));
+        }
     }
 }

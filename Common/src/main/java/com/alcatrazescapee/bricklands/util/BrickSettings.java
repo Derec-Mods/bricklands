@@ -21,7 +21,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
  * original Hex Lands (2019) by superfluke, anonlinux777, and TehNut.
  * Forked and adapted here for Bricklands.
  */
-public record BrickSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, boolean mergeSameBiome, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
+public record BrickSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, boolean mergeSameBiome, boolean randomBiomes, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
 {
     private static final Map<ResourceLocation, BrickSettings> DEFAULTS = new Object2ObjectOpenHashMap<>();
     private static final Codec<BrickSettings> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -30,6 +30,7 @@ public record BrickSettings(double biomeScale, int widthChunks, int heightChunks
             Codec.intRange(1, 64).optionalFieldOf("height_chunks", 2).forGetter(c -> c.heightChunks),
             Codec.intRange(0, 64).optionalFieldOf("rim_size", 2).forGetter(c -> c.rimSize),
             Codec.BOOL.optionalFieldOf("merge_same_biome", false).forGetter(c -> c.mergeSameBiome),
+            Codec.BOOL.optionalFieldOf("random_biomes", false).forGetter(c -> c.randomBiomes),
             BorderSettings.CODEC.optionalFieldOf("top_border").forGetter(c -> c.topBorder),
             BorderSettings.CODEC.optionalFieldOf("bottom_border").forGetter(c -> c.bottomBorder)
     ).apply(instance, BrickSettings::new));
@@ -44,9 +45,9 @@ public record BrickSettings(double biomeScale, int widthChunks, int heightChunks
 
     static
     {
-        register("overworld", new BrickSettings(32d, 4, 2, 2, false, Optional.empty(), BorderSettings.of(62, 74, Blocks.BRICKS)));
-        register("nether", new BrickSettings(4d, 4, 2, 2, false, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
-        register("the_end", new BrickSettings(4d, 4, 2, 2, false, Optional.empty(), Optional.empty()));
+        register("overworld", new BrickSettings(32d, 4, 2, 2, false, false, Optional.empty(), BorderSettings.of(62, 74, Blocks.BRICKS)));
+        register("nether", new BrickSettings(4d, 4, 2, 2, false, false, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
+        register("the_end", new BrickSettings(4d, 4, 2, 2, false, false, Optional.empty(), Optional.empty()));
     }
 
     public int brickWidthBlocks()

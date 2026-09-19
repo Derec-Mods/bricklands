@@ -20,6 +20,7 @@ Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). 
     - `height_chunks` (Default: 2) is the height of an individual brick, in chunks. Odd rows are shifted by half this width.
     - `rim_size` (Default: 2) is how many blocks thick the border is, measured inward from the brick edge.
     - `merge_same_biome` (Default: false) when true, skips rims between neighboring bricks that share a biome so they merge. When false, every brick edge gets a rim.
+    - `random_biomes` (Default: false) when true, each brick picks a biome at random from that dimension's biome list instead of sampling climate.
     - `top_border` and `bottom_border` are both border settings which define how the top and bottom borders of the world are built. The borders between bricks consist of a bottom border, air, and a top border. If not present, this section of the border will consist entirely of air. If present, it must have the following fields:
         - `min_height`: The minimum height of the border.
         - `max_height`: The maximum height of the border.
