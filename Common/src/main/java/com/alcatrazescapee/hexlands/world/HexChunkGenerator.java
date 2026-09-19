@@ -31,7 +31,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Derived from HexLands by AlcatrazEscapee, used under the MIT License.
+ * Derived from HexLands by AlcatrazEscapee (MIT License), itself based on the
+ * original Hex Lands (2019) by superfluke, anonlinux777, and TehNut.
  * Forked and adapted here for Bricklands.
  */
 public class HexChunkGenerator extends NoiseBasedChunkGenerator

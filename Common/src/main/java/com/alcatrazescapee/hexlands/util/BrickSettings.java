@@ -17,7 +17,8 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 /**
- * Derived from HexLands by AlcatrazEscapee, used under the MIT License.
+ * Derived from HexLands by AlcatrazEscapee (MIT License), itself based on the
+ * original Hex Lands (2019) by superfluke, anonlinux777, and TehNut.
  * Forked and adapted here for Bricklands.
  */
 public record BrickSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
