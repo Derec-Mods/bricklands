@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.alcatrazescapee.bricklands.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "RandomStateAccessor"
+  ],
+  "client": [
+    "WorldCreationUiStateMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "bricklands.refmap.json"
+}

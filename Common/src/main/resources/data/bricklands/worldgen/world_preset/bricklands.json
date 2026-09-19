@@ -3,36 +3,36 @@
     "minecraft:overworld": {
       "type": "minecraft:overworld",
       "generator": {
-        "type": "hexlands:bricklands",
+        "type": "bricklands:bricklands",
         "settings": "minecraft:overworld",
         "biome_source": {
           "type": "minecraft:multi_noise",
           "preset": "minecraft:overworld"
         },
-        "hex_settings": "hexlands:overworld"
+        "brick_settings": "bricklands:overworld"
       }
     },
     "minecraft:the_nether": {
       "type": "minecraft:the_nether",
       "generator": {
-        "type": "hexlands:bricklands",
+        "type": "bricklands:bricklands",
         "settings": "minecraft:nether",
         "biome_source": {
           "type": "minecraft:multi_noise",
           "preset": "minecraft:nether"
         },
-        "hex_settings": "hexlands:nether"
+        "brick_settings": "bricklands:nether"
       }
     },
     "minecraft:the_end": {
       "type": "minecraft:the_end",
       "generator": {
-        "type": "hexlands:bricklands",
+        "type": "bricklands:bricklands",
         "settings": "minecraft:end",
         "biome_source": {
           "type": "minecraft:the_end"
         },
-        "hex_settings": "hexlands:the_end"
+        "brick_settings": "bricklands:the_end"
       }
     }
   }

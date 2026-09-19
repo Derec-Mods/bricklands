@@ -6,7 +6,7 @@ val modIssueUrl: String by extra
 val modHomeUrl: String by extra
 val modDescription: String by extra
 val modJavaVersion: String by extra
-val modVersion: String = System.getenv("VERSION") ?: "0.0.0-indev"
+val modVersion: String = System.getenv("VERSION") ?: "1.0.0.0"
 
 val minecraftVersion: String by extra
 val minecraftVersionRange: String by extra

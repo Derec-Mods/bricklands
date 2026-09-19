@@ -1,0 +1,11 @@
+{
+  "generator.bricklands.bricklands": "Bricklands",
+  "generator.bricklands.bricklands_overworld_only": "Bricklands (Overworld)",
+  "bricklands.customize.title": "Bricklands Customization",
+  "bricklands.customize.random_biomes": "Random Biomes",
+  "bricklands.customize.merge_same_biome": "Merge Same Biome",
+  "bricklands.customize.width_chunks": "Brick Width (Chunks)",
+  "bricklands.customize.height_chunks": "Brick Height (Chunks)",
+  "bricklands.customize.rim_size": "Rim Size",
+  "bricklands.customize.biome_scale": "Biome Scale"
+}
