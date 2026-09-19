@@ -1,4 +1,4 @@
-package com.alcatrazescapee.hexlands.mixin;
+package com.alcatrazescapee.bricklands.mixin;
 
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.levelgen.NoiseRouter;

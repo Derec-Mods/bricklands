@@ -1,11 +1,11 @@
-package com.alcatrazescapee.hexlands.world;
+package com.alcatrazescapee.bricklands.world;
 
 import java.util.concurrent.ExecutionException;
 import java.util.function.UnaryOperator;
-import com.alcatrazescapee.hexlands.mixin.RandomStateAccessor;
-import com.alcatrazescapee.hexlands.platform.XPlatform;
-import com.alcatrazescapee.hexlands.util.Brick;
-import com.alcatrazescapee.hexlands.util.BrickSettings;
+import com.alcatrazescapee.bricklands.mixin.RandomStateAccessor;
+import com.alcatrazescapee.bricklands.platform.XPlatform;
+import com.alcatrazescapee.bricklands.util.Brick;
+import com.alcatrazescapee.bricklands.util.BrickSettings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.serialization.MapCodec;
@@ -23,14 +23,14 @@ import net.minecraft.world.level.levelgen.RandomState;
  * original Hex Lands (2019) by superfluke, anonlinux777, and TehNut.
  * Forked and adapted here for Bricklands.
  */
-public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.Sampler hexSampler)
+public record BrickRandomState(RandomState state, NoiseRouter brickRouter, Climate.Sampler brickSampler)
 {
-    private static final Cache<RandomState, HexRandomState> RANDOM_STATE_EXTENSIONS = CacheBuilder.newBuilder()
+    private static final Cache<RandomState, BrickRandomState> RANDOM_STATE_EXTENSIONS = CacheBuilder.newBuilder()
         .concurrencyLevel(4)
         .weakKeys()
         .build();
 
-    public static HexRandomState modify(RandomState state, NoiseGeneratorSettings settings, BrickSettings hexSettings)
+    public static BrickRandomState modify(RandomState state, NoiseGeneratorSettings settings, BrickSettings brickSettings)
     {
         try
         {
@@ -38,23 +38,23 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
                 final DensityFunction.Visitor visitor = f -> {
                     if (isNoiseDensityFunction(f))
                     {
-                        return sampleHexRelative(hexSettings, f);
+                        return sampleBrickRelative(brickSettings, f);
                     }
                     return f;
                 };
 
                 final NoiseRouter router = state.router();
-                final NoiseRouter hexRouter = new NoiseRouter(
+                final NoiseRouter brickRouter = new NoiseRouter(
                     router.barrierNoise(),
                     router.fluidLevelFloodednessNoise(),
                     router.fluidLevelSpreadNoise(),
                     router.lavaNoise(),
-                    sampleHexCenter(hexSettings, router.temperature()),
-                    sampleHexCenter(hexSettings, router.vegetation()),
-                    sampleHexCenter(hexSettings, router.continents()),
-                    sampleHexCenter(hexSettings, router.erosion()),
-                    sampleHexCenter(hexSettings, router.depth()),
-                    sampleHexCenter(hexSettings, router.ridges()),
+                    sampleBrickCenter(brickSettings, router.temperature()),
+                    sampleBrickCenter(brickSettings, router.vegetation()),
+                    sampleBrickCenter(brickSettings, router.continents()),
+                    sampleBrickCenter(brickSettings, router.erosion()),
+                    sampleBrickCenter(brickSettings, router.depth()),
+                    sampleBrickCenter(brickSettings, router.ridges()),
                     router.initialDensityWithoutJaggedness().mapAll(visitor),
                     router.finalDensity().mapAll(visitor),
                     router.veinToggle(),
@@ -62,29 +62,29 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
                     router.veinGap()
                 );
 
-                final Climate.Sampler hexSampler = new Climate.Sampler(
-                    hexRouter.temperature(),
-                    hexRouter.vegetation(),
-                    hexRouter.continents(),
-                    hexRouter.erosion(),
-                    hexRouter.depth(),
-                    hexRouter.ridges(),
+                final Climate.Sampler brickSampler = new Climate.Sampler(
+                    brickRouter.temperature(),
+                    brickRouter.vegetation(),
+                    brickRouter.continents(),
+                    brickRouter.erosion(),
+                    brickRouter.depth(),
+                    brickRouter.ridges(),
                     settings.spawnTarget()
                 );
 
-                XPlatform.INSTANCE.copyFabricCachedClimateSamplerSeed(state.sampler(), hexSampler);
+                XPlatform.INSTANCE.copyFabricCachedClimateSamplerSeed(state.sampler(), brickSampler);
 
                 final RandomStateAccessor mutableState = (RandomStateAccessor) (Object) state;
 
-                mutableState.setRouter(hexRouter);
-                mutableState.setSampler(hexSampler);
+                mutableState.setRouter(brickRouter);
+                mutableState.setSampler(brickSampler);
 
-                return new HexRandomState(state, hexRouter, hexSampler);
+                return new BrickRandomState(state, brickRouter, brickSampler);
             });
         }
         catch (ExecutionException e)
         {
-            throw new RuntimeException("Failed to inject HexRandomState into RandomState", e);
+            throw new RuntimeException("Failed to inject BrickRandomState into RandomState", e);
         }
     }
 
@@ -93,12 +93,12 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
         return f instanceof DensityFunctions.Noise || f instanceof DensityFunctions.Shift || f instanceof DensityFunctions.ShiftedNoise;
     }
 
-    private static DensityFunction sampleHexCenter(BrickSettings hexSettings, DensityFunction function)
+    private static DensityFunction sampleBrickCenter(BrickSettings brickSettings, DensityFunction function)
     {
         return new PointMapped(function, function.minValue(), function.maxValue(), point -> {
-            final double scale = hexSettings.biomeScale();
-            final double width = hexSettings.brickWidthBlocks() * scale;
-            final double height = hexSettings.brickHeightBlocks() * scale;
+            final double scale = brickSettings.biomeScale();
+            final double width = brickSettings.brickWidthBlocks() * scale;
+            final double height = brickSettings.brickHeightBlocks() * scale;
             final Brick brick = Brick.blockToBrick(point.blockX() * scale, point.blockZ() * scale, width, height);
             final BlockPos center = brick.center();
 
@@ -106,12 +106,12 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
         });
     }
 
-    private static DensityFunction sampleHexRelative(BrickSettings hexSettings, DensityFunction function)
+    private static DensityFunction sampleBrickRelative(BrickSettings brickSettings, DensityFunction function)
     {
         return new PointMapped(function, function.minValue(), function.maxValue(), point -> {
-            final double scale = hexSettings.biomeScale();
-            final double width = hexSettings.brickWidthBlocks();
-            final double height = hexSettings.brickHeightBlocks();
+            final double scale = brickSettings.biomeScale();
+            final double width = brickSettings.brickWidthBlocks();
+            final double height = brickSettings.brickHeightBlocks();
             final Brick brick = Brick.blockToBrick(point.blockX() * scale, point.blockZ() * scale, width * scale, height * scale);
             final BlockPos center = brick.center();
 

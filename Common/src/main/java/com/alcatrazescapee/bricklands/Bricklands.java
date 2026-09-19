@@ -1,5 +1,4 @@
-package com.alcatrazescapee.hexlands;
-
+package com.alcatrazescapee.bricklands;
 
 import java.util.function.BiConsumer;
 import com.mojang.logging.LogUtils;
@@ -8,9 +7,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import org.slf4j.Logger;
 
-import com.alcatrazescapee.hexlands.world.BrickChunkGenerator;
+import com.alcatrazescapee.bricklands.world.BrickChunkGenerator;
 
-public final class HexLands
+/**
+ * Derived from HexLands by AlcatrazEscapee (MIT License), itself based on the
+ * original Hex Lands (2019) by superfluke, anonlinux777, and TehNut.
+ * Forked and adapted here for Bricklands.
+ */
+public final class Bricklands
 {
     public static final String MOD_ID = "bricklands";
     private static final Logger LOGGER = LogUtils.getLogger();

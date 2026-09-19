@@ -18,12 +18,12 @@ This mod is based on [Hex Lands](https://www.curseforge.com/minecraft/mc-mods/he
 - For [1.17](https://github.com/alcatrazEscapee/hexlands/blob/1.17.x/README.md#configuration-data-packs)
 - For [1.16](https://github.com/alcatrazEscapee/hexlands/blob/1.16.x/README.md#configuration-data-packs)
 
-Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). Bricklands can be customized by adding a new world preset, which uses the `hexlands:bricklands` chunk generator. The generator has the following fields:
+Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). Bricklands can be customized by adding a new world preset, which uses the `bricklands:bricklands` chunk generator. The generator has the following fields:
 
-- `type` is a string identifying what generator to use. It should be `hexlands:bricklands`. The older `hexlands:hexlands` id still works.
+- `type` is a string identifying what generator to use. It should be `bricklands:bricklands`. The older `bricklands:hexlands` id still works.
 - `settings` is a [Noise Settings](https://minecraft.wiki/w/Noise_settings) used by the dimension.
 - `biome_source` is the biome source, as in vanilla. It can be a known preset, such as `"minecraft:overworld"`, or `"minecraft:nether"`, or it can be a JSON object following the vanilla biome source format.
-- `hex_settings` is an object with parameters defining how the brick grid works. It can either be a known preset, which must be one of `"hexlands:overworld"`, `"hexlands:nether"`, or `"hexlands:the_end"`, or it can be an object with the following fields:
+- `brick_settings` is an object with parameters defining how the brick grid works. It can either be a known preset, which must be one of `"bricklands:overworld"`, `"bricklands:nether"`, or `"bricklands:the_end"`, or it can be an object with the following fields:
     - `biome_scale` (Default: 8) is the scale at which biomes are sampled to create bricks. Higher values create more random biome layouts.
     - `width_chunks` (Default: 4) is the width of an individual brick, in chunks.
     - `height_chunks` (Default: 2) is the height of an individual brick, in chunks. Odd rows are shifted by half this width.
@@ -40,13 +40,13 @@ Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). 
 ```json5
 // Below is an example object which can be used in the `generator` field of a world preset.
 {
-    "type": "hexlands:bricklands",
+    "type": "bricklands:bricklands",
     "settings": "minecraft:overworld",
     "biome_source": {
       "type": "minecraft:multi_noise",
       "preset": "minecraft:overworld"
     },
-    "hex_settings": "hexlands:overworld"
+    "brick_settings": "bricklands:overworld"
 }
 ```
 

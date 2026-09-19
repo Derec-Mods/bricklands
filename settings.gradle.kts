@@ -23,5 +23,5 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 
-rootProject.name = "HexLands-1.21"
+rootProject.name = "Bricklands-1.21"
 include("Common", "Fabric", "NeoForge")

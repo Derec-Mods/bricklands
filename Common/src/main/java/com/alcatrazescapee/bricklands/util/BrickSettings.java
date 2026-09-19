@@ -1,9 +1,9 @@
-package com.alcatrazescapee.hexlands.util;
+package com.alcatrazescapee.bricklands.util;
 
 import java.util.Map;
 import java.util.Optional;
 
-import com.alcatrazescapee.hexlands.HexLands;
+import com.alcatrazescapee.bricklands.Bricklands;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.DataResult;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -37,7 +37,7 @@ public record BrickSettings(double biomeScale, int widthChunks, int heightChunks
         e -> e.map(
             l -> Optional.ofNullable(BrickSettings.DEFAULTS.get(l))
                 .map(DataResult::success)
-                .orElseGet(() -> DataResult.error(() -> "No hex_settings named '" + l + "'")),
+                .orElseGet(() -> DataResult.error(() -> "No brick_settings named '" + l + "'")),
             DataResult::success),
         Either::right);
 
@@ -60,8 +60,7 @@ public record BrickSettings(double biomeScale, int widthChunks, int heightChunks
 
     private static void register(String id, BrickSettings settings)
     {
-        DEFAULTS.put(ResourceLocation.fromNamespaceAndPath(HexLands.MOD_ID, id), settings);
-        DEFAULTS.put(ResourceLocation.fromNamespaceAndPath("bricklands", id), settings);
+        DEFAULTS.put(ResourceLocation.fromNamespaceAndPath(Bricklands.MOD_ID, id), settings);
     }
 
     public record BorderSettings(int minHeight, int maxHeight, BlockState state)

@@ -1,7 +1,7 @@
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package com.alcatrazescapee.hexlands.util;
+package com.alcatrazescapee.bricklands.util;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

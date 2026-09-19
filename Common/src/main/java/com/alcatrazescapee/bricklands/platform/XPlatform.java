@@ -1,4 +1,4 @@
-package com.alcatrazescapee.hexlands.platform;
+package com.alcatrazescapee.bricklands.platform;
 
 import java.util.ServiceLoader;
 

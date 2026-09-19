@@ -1,4 +1,4 @@
-package com.alcatrazescapee.hexlands.util;
+package com.alcatrazescapee.bricklands.util;
 
 import net.minecraft.core.BlockPos;
 

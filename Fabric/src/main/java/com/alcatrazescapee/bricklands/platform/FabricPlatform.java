@@ -1,4 +1,4 @@
-package com.alcatrazescapee.hexlands.platform;
+package com.alcatrazescapee.bricklands.platform;
 
 import net.fabricmc.fabric.impl.biome.MultiNoiseSamplerHooks;
 import net.minecraft.world.level.biome.Climate;
