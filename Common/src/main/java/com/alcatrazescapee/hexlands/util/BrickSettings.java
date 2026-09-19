@@ -16,21 +16,21 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public record HexSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
+public record BrickSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
 {
-    private static final Map<ResourceLocation, HexSettings> DEFAULTS = new Object2ObjectOpenHashMap<>();
-    private static final Codec<HexSettings> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    private static final Map<ResourceLocation, BrickSettings> DEFAULTS = new Object2ObjectOpenHashMap<>();
+    private static final Codec<BrickSettings> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.doubleRange(0.01, 1000).optionalFieldOf("biome_scale", 8d).forGetter(c -> c.biomeScale),
             Codec.intRange(1, 64).optionalFieldOf("width_chunks", 4).forGetter(c -> c.widthChunks),
             Codec.intRange(1, 64).optionalFieldOf("height_chunks", 2).forGetter(c -> c.heightChunks),
             Codec.intRange(0, 64).optionalFieldOf("rim_size", 2).forGetter(c -> c.rimSize),
             BorderSettings.CODEC.optionalFieldOf("top_border").forGetter(c -> c.topBorder),
             BorderSettings.CODEC.optionalFieldOf("bottom_border").forGetter(c -> c.bottomBorder)
-    ).apply(instance, HexSettings::new));
+    ).apply(instance, BrickSettings::new));
 
-    public static final Codec<HexSettings> CODEC = Codec.either(ResourceLocation.CODEC, DIRECT_CODEC).comapFlatMap(
+    public static final Codec<BrickSettings> CODEC = Codec.either(ResourceLocation.CODEC, DIRECT_CODEC).comapFlatMap(
         e -> e.map(
-            l -> Optional.ofNullable(HexSettings.DEFAULTS.get(l))
+            l -> Optional.ofNullable(BrickSettings.DEFAULTS.get(l))
                 .map(DataResult::success)
                 .orElseGet(() -> DataResult.error(() -> "No hex_settings named '" + l + "'")),
             DataResult::success),
@@ -38,9 +38,9 @@ public record HexSettings(double biomeScale, int widthChunks, int heightChunks, 
 
     static
     {
-        register("overworld", new HexSettings(32d, 4, 2, 2, Optional.empty(), BorderSettings.of(62, 66, Blocks.STONE_BRICKS)));
-        register("nether", new HexSettings(4d, 4, 2, 2, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
-        register("the_end", new HexSettings(4d, 4, 2, 2, Optional.empty(), Optional.empty()));
+        register("overworld", new BrickSettings(32d, 4, 2, 2, Optional.empty(), BorderSettings.of(62, 66, Blocks.STONE_BRICKS)));
+        register("nether", new BrickSettings(4d, 4, 2, 2, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
+        register("the_end", new BrickSettings(4d, 4, 2, 2, Optional.empty(), Optional.empty()));
     }
 
     public int brickWidthBlocks()
@@ -53,7 +53,7 @@ public record HexSettings(double biomeScale, int widthChunks, int heightChunks, 
         return heightChunks * 16;
     }
 
-    private static void register(String id, HexSettings settings)
+    private static void register(String id, BrickSettings settings)
     {
         DEFAULTS.put(ResourceLocation.fromNamespaceAndPath(HexLands.MOD_ID, id), settings);
         DEFAULTS.put(ResourceLocation.fromNamespaceAndPath("bricklands", id), settings);

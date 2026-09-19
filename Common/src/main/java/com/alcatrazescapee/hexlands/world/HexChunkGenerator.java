@@ -24,7 +24,7 @@ import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 
 import com.alcatrazescapee.hexlands.util.Brick;
-import com.alcatrazescapee.hexlands.util.HexSettings;
+import com.alcatrazescapee.hexlands.util.BrickSettings;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -35,15 +35,15 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
     public static final MapCodec<HexChunkGenerator> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         BiomeSource.CODEC.fieldOf("biome_source").forGetter(c -> c.biomeSource),
         NoiseGeneratorSettings.CODEC.fieldOf("settings").forGetter(c -> c.settings),
-        HexSettings.CODEC.fieldOf("hex_settings").forGetter(c -> c.hexSettings)
+        BrickSettings.CODEC.fieldOf("hex_settings").forGetter(c -> c.hexSettings)
     ).apply(instance, HexChunkGenerator::new));
 
     private final Holder<NoiseGeneratorSettings> settings;
-    private final HexSettings hexSettings;
+    private final BrickSettings hexSettings;
 
     private final Supplier<Aquifer.FluidPicker> stupidMojangGlobalFluidPicker;
 
-    public HexChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, HexSettings hexSettings)
+    public HexChunkGenerator(BiomeSource biomeSource, Holder<NoiseGeneratorSettings> settings, BrickSettings hexSettings)
     {
         super(biomeSource, settings);
         this.settings = settings;
@@ -181,8 +181,8 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
             .map(border -> border.sample(random))
             .orElse(maxY + 1);
 
-        final BlockState minBorderState = hexSettings.bottomBorder().map(HexSettings.BorderSettings::state).orElse(Blocks.AIR.defaultBlockState());
-        final BlockState maxBorderState = hexSettings.topBorder().map(HexSettings.BorderSettings::state).orElse(Blocks.AIR.defaultBlockState());
+        final BlockState minBorderState = hexSettings.bottomBorder().map(BrickSettings.BorderSettings::state).orElse(Blocks.AIR.defaultBlockState());
+        final BlockState maxBorderState = hexSettings.topBorder().map(BrickSettings.BorderSettings::state).orElse(Blocks.AIR.defaultBlockState());
 
         return new PlacedHex(brick, biome, preliminaryHeight, minY, maxY, borderMinY, borderMaxY, minBorderState, maxBorderState);
     }

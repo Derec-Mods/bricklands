@@ -5,7 +5,7 @@ import java.util.function.UnaryOperator;
 import com.alcatrazescapee.hexlands.mixin.RandomStateAccessor;
 import com.alcatrazescapee.hexlands.platform.XPlatform;
 import com.alcatrazescapee.hexlands.util.Brick;
-import com.alcatrazescapee.hexlands.util.HexSettings;
+import com.alcatrazescapee.hexlands.util.BrickSettings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.serialization.MapCodec;
@@ -25,7 +25,7 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
         .weakKeys()
         .build();
 
-    public static HexRandomState modify(RandomState state, NoiseGeneratorSettings settings, HexSettings hexSettings)
+    public static HexRandomState modify(RandomState state, NoiseGeneratorSettings settings, BrickSettings hexSettings)
     {
         try
         {
@@ -88,7 +88,7 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
         return f instanceof DensityFunctions.Noise || f instanceof DensityFunctions.Shift || f instanceof DensityFunctions.ShiftedNoise;
     }
 
-    private static DensityFunction sampleHexCenter(HexSettings hexSettings, DensityFunction function)
+    private static DensityFunction sampleHexCenter(BrickSettings hexSettings, DensityFunction function)
     {
         return new PointMapped(function, function.minValue(), function.maxValue(), point -> {
             final double scale = hexSettings.biomeScale();
@@ -101,7 +101,7 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
         });
     }
 
-    private static DensityFunction sampleHexRelative(HexSettings hexSettings, DensityFunction function)
+    private static DensityFunction sampleHexRelative(BrickSettings hexSettings, DensityFunction function)
     {
         return new PointMapped(function, function.minValue(), function.maxValue(), point -> {
             final double scale = hexSettings.biomeScale();
