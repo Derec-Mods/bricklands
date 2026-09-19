@@ -147,17 +147,12 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
                 final int z = blockZ + localZ;
 
                 final Brick brick = Brick.blockToBrick(x * brickScale, z * brickScale, brickWidth, brickHeight);
-                final Brick adjacentBrick = brick.adjacent(x * brickScale, z * brickScale);
 
-                final PlacedBrick placed = cachedBiomesByBrick.computeIfAbsent(brick, k -> placeBrick(k, state, noiseChunk, 0));
                 if (brick.distanceToEdge(x * brickScale, z * brickScale) <= rimSize)
                 {
-                    final PlacedBrick adjacentPlacedBrick = cachedBiomesByBrick.computeIfAbsent(adjacentBrick, k -> placeBrick(k, state, noiseChunk, 0));
-                    if (placed.biome != adjacentPlacedBrick.biome)
-                    {
-                        cursor.setX(x).setZ(z);
-                        applier.apply(cursor, placed);
-                    }
+                    final PlacedBrick placed = cachedBiomesByBrick.computeIfAbsent(brick, k -> placeBrick(k, state, noiseChunk, 0));
+                    cursor.setX(x).setZ(z);
+                    applier.apply(cursor, placed);
                 }
             }
         }

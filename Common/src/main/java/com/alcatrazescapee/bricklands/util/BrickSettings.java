@@ -43,7 +43,7 @@ public record BrickSettings(double biomeScale, int widthChunks, int heightChunks
 
     static
     {
-        register("overworld", new BrickSettings(32d, 4, 2, 2, Optional.empty(), BorderSettings.of(62, 66, Blocks.STONE_BRICKS)));
+        register("overworld", new BrickSettings(32d, 4, 2, 2, Optional.empty(), BorderSettings.of(62, 66, Blocks.BRICKS)));
         register("nether", new BrickSettings(4d, 4, 2, 2, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
         register("the_end", new BrickSettings(4d, 4, 2, 2, Optional.empty(), Optional.empty()));
     }
