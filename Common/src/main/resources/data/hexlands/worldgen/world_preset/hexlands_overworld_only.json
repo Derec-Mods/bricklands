@@ -3,7 +3,7 @@
     "minecraft:overworld": {
       "type": "minecraft:overworld",
       "generator": {
-        "type": "hexlands:hexlands",
+        "type": "hexlands:bricklands",
         "settings": "minecraft:overworld",
         "biome_source": {
           "type": "minecraft:multi_noise",

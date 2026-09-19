@@ -19,5 +19,6 @@ public final class HexLands
     {
         LOGGER.info("BOB THE BUILDER...");
         registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "hexlands"), HexChunkGenerator.CODEC);
+        registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "bricklands"), HexChunkGenerator.CODEC);
     }
 }
