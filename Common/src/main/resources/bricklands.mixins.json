@@ -11,6 +11,5 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "hexlands.refmap.json"
+  "refmap": "bricklands.refmap.json"
 }
-  

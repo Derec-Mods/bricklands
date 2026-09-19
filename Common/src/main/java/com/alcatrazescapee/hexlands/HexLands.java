@@ -12,7 +12,7 @@ import com.alcatrazescapee.hexlands.world.HexChunkGenerator;
 
 public final class HexLands
 {
-    public static final String MOD_ID = "hexlands";
+    public static final String MOD_ID = "bricklands";
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void init(BiConsumer<ResourceLocation, MapCodec<? extends ChunkGenerator>> registry)
