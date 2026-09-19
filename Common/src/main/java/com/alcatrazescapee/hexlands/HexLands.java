@@ -17,7 +17,7 @@ public final class HexLands
 
     public static void init(BiConsumer<ResourceLocation, MapCodec<? extends ChunkGenerator>> registry)
     {
-        LOGGER.info("Wait, this isn't Catan...");
+        LOGGER.info("BOB THE BUILDER...");
         registry.accept(ResourceLocation.fromNamespaceAndPath(MOD_ID, "hexlands"), HexChunkGenerator.CODEC);
     }
 }
