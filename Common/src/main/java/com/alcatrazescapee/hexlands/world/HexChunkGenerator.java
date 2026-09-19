@@ -23,7 +23,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 
-import com.alcatrazescapee.hexlands.util.Hex;
+import com.alcatrazescapee.hexlands.util.Brick;
 import com.alcatrazescapee.hexlands.util.HexSettings;
 
 import com.mojang.serialization.Codec;
@@ -112,23 +112,25 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
     public void addDebugScreenInfo(List<String> tooltips, RandomState state, BlockPos pos)
     {
         final double hexScale = hexSettings.biomeScale();
-        final double hexSize = hexSettings.hexSize() * hexScale;
-        final Hex hex = Hex.blockToHex(pos.getX() * hexScale, pos.getZ() * hexScale, hexSize);
-        final PlacedHex placed = placeHex(hex, state, null, pos.getY());
+        final double brickWidth = hexSettings.brickWidthBlocks() * hexScale;
+        final double brickHeight = hexSettings.brickHeightBlocks() * hexScale;
+        final Brick brick = Brick.blockToBrick(pos.getX() * hexScale, pos.getZ() * hexScale, brickWidth, brickHeight);
+        final PlacedHex placed = placeHex(brick, state, null, pos.getY());
 
-        tooltips.add(String.format("Hex (%d, %d) at %s : H%d B%d-%d", hex.q(), hex.r(), placed.biome().unwrap().map(ResourceKey::location, e -> "[unregistered biome]"), (int) placed.preliminaryHeight, placed.borderMinY, placed.borderMaxY));
+        tooltips.add(String.format("Brick (%d, %d) at %s : H%d B%d-%d", brick.col(), brick.row(), placed.biome().unwrap().map(ResourceKey::location, e -> "[unregistered biome]"), (int) placed.preliminaryHeight, placed.borderMinY, placed.borderMaxY));
         super.addDebugScreenInfo(tooltips, state, pos);
     }
 
     private void applyAtHexBorders(ChunkAccess chunk, RandomState state, NoiseChunk noiseChunk, ColumnApplier applier)
     {
-        final Map<Hex, PlacedHex> cachedBiomesByHex = new HashMap<>();
+        final Map<Brick, PlacedHex> cachedBiomesByBrick = new HashMap<>();
         final ChunkPos chunkPos = chunk.getPos();
         final int blockX = chunkPos.getMinBlockX(), blockZ = chunkPos.getMinBlockZ();
 
         final double hexScale = hexSettings.biomeScale();
-        final double hexSize = hexSettings.hexSize() * hexScale;
-        final double hexBorder = hexSettings.hexBorderThreshold();
+        final double brickWidth = hexSettings.brickWidthBlocks() * hexScale;
+        final double brickHeight = hexSettings.brickHeightBlocks() * hexScale;
+        final double rimSize = hexSettings.rimSize() * hexScale;
 
         final BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
 
@@ -139,13 +141,13 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
                 final int x = blockX + localX;
                 final int z = blockZ + localZ;
 
-                final Hex hex = Hex.blockToHex(x * hexScale, z * hexScale, hexSize);
-                final Hex adjacentHex = hex.adjacent(x * hexScale, z * hexScale);
+                final Brick brick = Brick.blockToBrick(x * hexScale, z * hexScale, brickWidth, brickHeight);
+                final Brick adjacentBrick = brick.adjacent(x * hexScale, z * hexScale);
 
-                final PlacedHex placed = cachedBiomesByHex.computeIfAbsent(hex, k -> placeHex(k, state, noiseChunk, 0));
-                if (hex.radius(x * hexScale, z * hexScale) >= hexBorder)
+                final PlacedHex placed = cachedBiomesByBrick.computeIfAbsent(brick, k -> placeHex(k, state, noiseChunk, 0));
+                if (brick.distanceToEdge(x * hexScale, z * hexScale) <= rimSize)
                 {
-                    final PlacedHex adjacentPlacedHex = cachedBiomesByHex.computeIfAbsent(adjacentHex, k -> placeHex(k, state, noiseChunk, 0));
+                    final PlacedHex adjacentPlacedHex = cachedBiomesByBrick.computeIfAbsent(adjacentBrick, k -> placeHex(k, state, noiseChunk, 0));
                     if (placed.biome != adjacentPlacedHex.biome)
                     {
                         cursor.setX(x).setZ(z);
@@ -156,9 +158,9 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
         }
     }
 
-    private PlacedHex placeHex(Hex hex, RandomState state, @Nullable NoiseChunk noiseChunk, int backupSurfaceY)
+    private PlacedHex placeHex(Brick brick, RandomState state, @Nullable NoiseChunk noiseChunk, int backupSurfaceY)
     {
-        final BlockPos center = hex.center();
+        final BlockPos center = brick.center();
         final double hexScale = hexSettings.biomeScale();
         final int quartX = QuartPos.fromBlock((int) (center.getX() / hexScale));
         final int quartZ = QuartPos.fromBlock((int) (center.getZ() / hexScale));
@@ -166,7 +168,7 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
         final HexRandomState hexRandomState = HexRandomState.modify(state, settings.value(), hexSettings);
         final double preliminaryHeight = noiseChunk != null ? noiseChunk.preliminarySurfaceLevel((int) (center.getX() / hexScale), (int) (center.getZ() / hexScale)) : backupSurfaceY;
         final Holder<Biome> biome = biomeSource.getNoiseBiome(quartX, QuartPos.fromBlock((int) preliminaryHeight), quartZ, hexRandomState.hexSampler());
-        final RandomSource random = new XoroshiroRandomSource(hex.q() * 178293412341L, hex.r() * 7520351231L);
+        final RandomSource random = new XoroshiroRandomSource(brick.col() * 178293412341L, brick.row() * 7520351231L);
 
         final int minY = noiseSettings.minY();
         final int maxY = noiseSettings.minY() + noiseSettings.height() - 1;
@@ -182,7 +184,7 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
         final BlockState minBorderState = hexSettings.bottomBorder().map(HexSettings.BorderSettings::state).orElse(Blocks.AIR.defaultBlockState());
         final BlockState maxBorderState = hexSettings.topBorder().map(HexSettings.BorderSettings::state).orElse(Blocks.AIR.defaultBlockState());
 
-        return new PlacedHex(hex, biome, preliminaryHeight, minY, maxY, borderMinY, borderMaxY, minBorderState, maxBorderState);
+        return new PlacedHex(brick, biome, preliminaryHeight, minY, maxY, borderMinY, borderMaxY, minBorderState, maxBorderState);
     }
 
     private NoiseChunk getOrCreateNoiseChunk(ChunkAccess chunk, RandomState state, StructureManager structureManager, Blender blender)
@@ -190,7 +192,7 @@ public class HexChunkGenerator extends NoiseBasedChunkGenerator
         return chunk.getOrCreateNoiseChunk(c -> NoiseChunk.forChunk(c, state, Beardifier.forStructuresInChunk(structureManager, c.getPos()), settings.value(), stupidMojangGlobalFluidPicker.get(), blender));
     }
 
-    record PlacedHex(Hex hex, Holder<Biome> biome, double preliminaryHeight, int minY, int maxY, int borderMinY, int borderMaxY, BlockState borderMinState, BlockState borderMaxState) {}
+    record PlacedHex(Brick brick, Holder<Biome> biome, double preliminaryHeight, int minY, int maxY, int borderMinY, int borderMaxY, BlockState borderMinState, BlockState borderMaxState) {}
 
     @FunctionalInterface
     interface ColumnApplier

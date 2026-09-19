@@ -4,7 +4,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.UnaryOperator;
 import com.alcatrazescapee.hexlands.mixin.RandomStateAccessor;
 import com.alcatrazescapee.hexlands.platform.XPlatform;
-import com.alcatrazescapee.hexlands.util.Hex;
+import com.alcatrazescapee.hexlands.util.Brick;
 import com.alcatrazescapee.hexlands.util.HexSettings;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -92,9 +92,10 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
     {
         return new PointMapped(function, function.minValue(), function.maxValue(), point -> {
             final double scale = hexSettings.biomeScale();
-            final double size = hexSettings.hexSize() * scale;
-            final Hex hex = Hex.blockToHex(point.blockX() * scale, point.blockZ() * scale, size);
-            final BlockPos center = hex.center();
+            final double width = hexSettings.brickWidthBlocks() * scale;
+            final double height = hexSettings.brickHeightBlocks() * scale;
+            final Brick brick = Brick.blockToBrick(point.blockX() * scale, point.blockZ() * scale, width, height);
+            final BlockPos center = brick.center();
 
             return new DensityFunction.SinglePointContext(center.getX(), point.blockY(), center.getZ());
         });
@@ -104,9 +105,10 @@ public record HexRandomState(RandomState state, NoiseRouter hexRouter, Climate.S
     {
         return new PointMapped(function, function.minValue(), function.maxValue(), point -> {
             final double scale = hexSettings.biomeScale();
-            final double size = hexSettings.hexSize();
-            final Hex hex = Hex.blockToHex(point.blockX() * scale, point.blockZ() * scale, size * scale);
-            final BlockPos center = hex.center();
+            final double width = hexSettings.brickWidthBlocks();
+            final double height = hexSettings.brickHeightBlocks();
+            final Brick brick = Brick.blockToBrick(point.blockX() * scale, point.blockZ() * scale, width * scale, height * scale);
+            final BlockPos center = brick.center();
 
             final double deltaX = point.blockX() - center.getX() / scale;
             final double deltaZ = point.blockZ() - center.getZ() / scale;

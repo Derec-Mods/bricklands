@@ -16,13 +16,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-public record HexSettings(double biomeScale, double hexSize, double hexBorderThreshold, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
+public record HexSettings(double biomeScale, int widthChunks, int heightChunks, int rimSize, Optional<BorderSettings> topBorder, Optional<BorderSettings> bottomBorder)
 {
     private static final Map<ResourceLocation, HexSettings> DEFAULTS = new Object2ObjectOpenHashMap<>();
     private static final Codec<HexSettings> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.doubleRange(0.01, 1000).optionalFieldOf("biome_scale", 8d).forGetter(c -> c.biomeScale),
-            Codec.doubleRange(1, 1000).optionalFieldOf("hex_size", 40d).forGetter(c -> c.hexSize),
-            Codec.doubleRange(0, 1).optionalFieldOf("hex_border_threshold", 0.92d).forGetter(c -> c.hexBorderThreshold),
+            Codec.intRange(1, 64).optionalFieldOf("width_chunks", 4).forGetter(c -> c.widthChunks),
+            Codec.intRange(1, 64).optionalFieldOf("height_chunks", 2).forGetter(c -> c.heightChunks),
+            Codec.intRange(0, 64).optionalFieldOf("rim_size", 2).forGetter(c -> c.rimSize),
             BorderSettings.CODEC.optionalFieldOf("top_border").forGetter(c -> c.topBorder),
             BorderSettings.CODEC.optionalFieldOf("bottom_border").forGetter(c -> c.bottomBorder)
     ).apply(instance, HexSettings::new));
@@ -37,9 +38,19 @@ public record HexSettings(double biomeScale, double hexSize, double hexBorderThr
 
     static
     {
-        register("overworld", new HexSettings(32d, 40d, 0.92d, Optional.empty(), BorderSettings.of(62, 66, Blocks.STONE_BRICKS)));
-        register("nether", new HexSettings(4d, 40d, 0.92d, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
-        register("the_end", new HexSettings(4d, 40d, 0.92d, Optional.empty(), Optional.empty()));
+        register("overworld", new HexSettings(32d, 4, 2, 2, Optional.empty(), BorderSettings.of(62, 66, Blocks.STONE_BRICKS)));
+        register("nether", new HexSettings(4d, 4, 2, 2, BorderSettings.of(100, 110, Blocks.NETHER_BRICKS), BorderSettings.of(31, 40, Blocks.NETHER_BRICKS)));
+        register("the_end", new HexSettings(4d, 4, 2, 2, Optional.empty(), Optional.empty()));
+    }
+
+    public int brickWidthBlocks()
+    {
+        return widthChunks * 16;
+    }
+
+    public int brickHeightBlocks()
+    {
+        return heightChunks * 16;
     }
 
     private static void register(String id, HexSettings settings)
