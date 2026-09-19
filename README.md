@@ -1,5 +1,3 @@
-![Bricklands](./img/splash.png)
-
 This mod is based on [Hex Lands](https://www.curseforge.com/minecraft/mc-mods/hex-lands) by superfluke, et. al., rewritten so biomes sit on a staggered brick grid instead of hexes.
 
 ### Features
@@ -10,13 +8,6 @@ This mod is based on [Hex Lands](https://www.curseforge.com/minecraft/mc-mods/he
 - Many options for world customization via data packs.
 
 ### Configuration (Data Packs - 1.21)
-
-**Note:** Due to Mojang's changes to world generation, configuration will be different depending on which Minecraft version you are using!
-
-- For [1.19 - 1.21](https://github.com/alcatrazEscapee/hexlands/blob/1.21.x/README.md#configuration-data-packs)
-- For [1.18](https://github.com/alcatrazEscapee/hexlands/blob/1.18.x/README.md#configuration-data-packs)
-- For [1.17](https://github.com/alcatrazEscapee/hexlands/blob/1.17.x/README.md#configuration-data-packs)
-- For [1.16](https://github.com/alcatrazEscapee/hexlands/blob/1.16.x/README.md#configuration-data-packs)
 
 Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). Bricklands can be customized by adding a new world preset, which uses the `bricklands:bricklands` chunk generator. The generator has the following fields:
 
@@ -49,18 +40,3 @@ Worlds are specified by [World Presets](https://minecraft.wiki/w/World_preset). 
     "brick_settings": "bricklands:overworld"
 }
 ```
-
-### Gallery
-
-![Overworld](./img/hex_overworld.png)
-![Nether](./img/hex_nether.png)
-
-With [Oh The Biomes You'll Bo](https://www.curseforge.com/minecraft/mc-mods/oh-the-biomes-youll-go):
-
-![BYG Overworld](./img/hex_overworld_byg.png)
-![BYG Nether](./img/hex_nether_byg.png)
-![BYG End](./img/hex_end_byg.png)
-
-With [Biomes O Plenty](https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty)
-
-![Biomes O Plenty Overworld](./img/hex_overworld_bop.png)
