@@ -2,7 +2,7 @@ This mod is based on [Hex Lands](https://www.curseforge.com/minecraft/mc-mods/he
 
 ### Features
 
-- Adds two world type presets: "Bricklands", and "Bricklands (Overworld)". The former enables brick terrain generation in the overworld and the nether; the latter only enables it in the overworld.
+- Adds two world type presets: "Bricklands", and "Bricklands (Overworld)". The former enables brick terrain generation in the overworld and the nether; the latter only enables it in the overworld. The world create **Customize** button edits brick size, rims, merge-same-biome, and random biomes.
 - Each brick is 4 chunks wide by 2 chunks tall, with odd rows shifted by half a brick. Each brick contains a single biome. Bricks of different types are bordered by walls.
 - Automatic compatibility with mods that add biomes to the overworld or other world generation.
 - Many options for world customization via data packs.

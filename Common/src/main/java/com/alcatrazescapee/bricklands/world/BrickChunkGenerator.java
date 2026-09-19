@@ -74,6 +74,16 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
         return CODEC;
     }
 
+    public BrickSettings brickSettings()
+    {
+        return brickSettings;
+    }
+
+    public BrickChunkGenerator withBrickSettings(BrickSettings newSettings)
+    {
+        return new BrickChunkGenerator(directBiomeSource, settings, newSettings);
+    }
+
     @Override
     public void buildSurface(WorldGenRegion level, StructureManager structureManager, RandomState randomState, ChunkAccess chunk)
     {

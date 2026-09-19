@@ -50,6 +50,16 @@ public record BrickSettings(double biomeScale, int widthChunks, int heightChunks
         register("the_end", new BrickSettings(4d, 4, 2, 2, false, false, Optional.empty(), Optional.empty()));
     }
 
+    public static BrickSettings overworldDefaults()
+    {
+        return DEFAULTS.get(ResourceLocation.fromNamespaceAndPath(Bricklands.MOD_ID, "overworld"));
+    }
+
+    public BrickSettings withCustomize(double biomeScale, int widthChunks, int heightChunks, int rimSize, boolean mergeSameBiome, boolean randomBiomes)
+    {
+        return new BrickSettings(biomeScale, widthChunks, heightChunks, rimSize, mergeSameBiome, randomBiomes, topBorder, bottomBorder);
+    }
+
     public int brickWidthBlocks()
     {
         return widthChunks * 16;
