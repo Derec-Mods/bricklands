@@ -25,6 +25,7 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 
+import com.alcatrazescapee.bricklands.util.BiomeFamilies;
 import com.alcatrazescapee.bricklands.util.Brick;
 import com.alcatrazescapee.bricklands.util.BrickSettings;
 
@@ -223,14 +224,12 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
         void apply(BlockPos.MutableBlockPos cursor, PlacedBrick placed);
     }
 
-    /**
-     * Picks one biome per brick from the parent source's biome list, seeded by brick column and row.
-     */
     private static class RandomBrickBiomeSource extends BiomeSource
     {
         private final BiomeSource parent;
         private final BrickSettings brickSettings;
         private final List<Holder<Biome>> biomes;
+        private final List<List<Holder<Biome>>> pools;
 
         RandomBrickBiomeSource(BiomeSource parent, BrickSettings brickSettings)
         {
@@ -239,6 +238,7 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
             this.biomes = parent.possibleBiomes().stream()
                 .sorted(Comparator.comparing(holder -> holder.unwrapKey().map(key -> key.location().toString()).orElse("")))
                 .toList();
+            this.pools = BiomeFamilies.pools(this.biomes);
         }
 
         @Override
@@ -256,7 +256,7 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
         @Override
         public Holder<Biome> getNoiseBiome(int quartX, int quartY, int quartZ, Climate.Sampler sampler)
         {
-            if (biomes.isEmpty())
+            if (pools.isEmpty())
             {
                 return parent.getNoiseBiome(quartX, quartY, quartZ, sampler);
             }
@@ -267,7 +267,8 @@ public class BrickChunkGenerator extends NoiseBasedChunkGenerator
             final int blockZ = QuartPos.toBlock(quartZ);
             final Brick brick = Brick.blockToBrick(blockX * scale, blockZ * scale, width, height);
             final RandomSource random = new XoroshiroRandomSource(brick.col() * 178293412341L, brick.row() * 7520351231L);
-            return biomes.get(random.nextInt(biomes.size()));
+            final List<Holder<Biome>> pool = pools.get(random.nextInt(pools.size()));
+            return pool.get(random.nextInt(pool.size()));
         }
     }
 }
